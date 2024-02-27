@@ -14,39 +14,46 @@
  * }
  */
 class Solution {
-    ArrayList<Integer> inorder = new ArrayList<Integer>();
     public TreeNode deleteNode(TreeNode root, int key) {
-        inorderTraversal(root);
-        return construct(0, inorder.size() - 1, key);
+        return delete(root, key);
     }
 
-    public void inorderTraversal(TreeNode node){
-        if(node == null){
-            return;
+    public int getJustSmaller(TreeNode node){
+        while(node.right != null){
+            node = node.right;
         }
-        inorderTraversal(node.left);
-        inorder.add(node.val);
-        inorderTraversal(node.right);
+        return node.val;
     }
 
-    public TreeNode construct(int start, int end, int key){
+    public int getJustLarger(TreeNode node){
+        while(node.left != null){
+            node = node.left;
+        }
+        return node.val;
+    }
 
-        if(start > end){
+    public TreeNode delete(TreeNode node, int key){
+        if(node == null){
             return null;
         }
-
-        int mid = (start + end)/2;
-        if(inorder.get(mid) == key){
-            if(mid == end){
+        if(node.val == key){
+            if(node.left == null && node.right == null){
                 return null;
+            }else if(node.right == null){
+                node.val = getJustSmaller(node.left);
+                key = node.val;
+            }else{
+                node.val = getJustLarger(node.right);
+                key = node.val;
             }
-           mid++;
+        }
+        if(node.val <= key){
+            node.right = delete(node.right, key);
         }
 
-        System.out.println(start + " " + end);
-        TreeNode node = new TreeNode(inorder.get(mid));
-        node.left = construct(start, mid - 1, key);
-        node.right = construct(mid + 1, end, key);
+        if(node.val >= key){
+            node.left = delete(node.left, key);
+        }
 
         return node;
     }
