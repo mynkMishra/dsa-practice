@@ -15,10 +15,10 @@
  */
 class Solution {
     int maxLvl = Integer.MIN_VALUE;
-    Map<Integer, Integer> map = new HashMap<Integer, Integer>();
+    int ans = Integer.MIN_VALUE;
     public int findBottomLeftValue(TreeNode root) {
         dfs(root, 0);
-        return map.get(maxLvl);
+        return ans;
     }
 
     public void dfs(TreeNode node, int lvl){
@@ -26,9 +26,9 @@ class Solution {
             return;
         }
 
-        maxLvl = Math.max(maxLvl, lvl);
-        if(map.get(lvl) == null){
-            map.put(lvl, node.val);
+        if(lvl > maxLvl){
+            maxLvl = lvl;
+            ans = node.val;
         }
         dfs(node.left, lvl + 1);
         dfs(node.right, lvl + 1);
