@@ -25,7 +25,7 @@ class Solution {
         int score = 0;
         int result = 0;
         while(start <= end){
-            System.out.println(power + " " + score + " " + start + " " + end);
+            // System.out.println(power + " " + score + " " + start + " " + end);
             if(1 <= score && list.get(start) > power){
                 score--;
                 power = power + list.get(end);
@@ -39,7 +39,7 @@ class Solution {
             }
             result = Math.max(result, score);
         }
-        System.out.println(power + " " + score + " " + start + " " + end);
+        // System.out.println(power + " " + score + " " + start + " " + end);
         return result;
     }
 }
