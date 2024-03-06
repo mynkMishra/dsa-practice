@@ -11,21 +11,24 @@
  */
 public class Solution {
     public boolean hasCycle(ListNode head) {
-        ListNode slow = head;
-        ListNode fast = head;
+        if(head == null){
+            return false;
+        }
 
-        while(fast != null){
+        ListNode slow = head;
+        ListNode fast = head.next;
+
+        while(fast != null && fast != slow){
             fast = fast.next;
-            if(fast != null){
+            if(fast!= null){
                 fast = fast.next;
                 slow = slow.next;
             }
-
-            if(fast == slow){
-                return true;
-            }
         }
 
+        if(fast != null && fast == slow){
+            return true;
+        }
         return false;
     }
 }
