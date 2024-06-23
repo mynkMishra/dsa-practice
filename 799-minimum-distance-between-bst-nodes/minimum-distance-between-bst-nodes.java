@@ -14,11 +14,12 @@
  * }
  */
 class Solution {
+
     TreeNode prev = null;
-    int min = Integer.MAX_VALUE;
+    int ans = Integer.MAX_VALUE;
     public int minDiffInBST(TreeNode root) {
         dfs(root);
-        return min;
+        return ans;
     }
 
     public void dfs(TreeNode node){
@@ -27,12 +28,13 @@ class Solution {
             return;
         }
 
-        
         dfs(node.left);
+
         if(prev != null){
-            min = Math.min(min, Math.abs(prev.val - node.val));
+            ans = Math.min(ans, Math.abs(prev.val - node.val));
         }
-        prev =  node;
+
+        prev = node;
         dfs(node.right);
     }
 }
