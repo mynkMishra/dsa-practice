@@ -10,7 +10,7 @@
  */
 class Solution {
     public ListNode mergeTwoLists(ListNode list1, ListNode list2) {
-
+        
         if(list1 == null){
             return list2;
         }
@@ -19,46 +19,45 @@ class Solution {
             return list1;
         }
 
-        ListNode start = null;
-        ListNode temp = null;
+        ListNode res = null;
+        ListNode head = null;
 
         while(list1 != null && list2 != null){
-            if(start == null){
-                if(list1.val < list2.val){
-                    start = list1;
-                    temp = start;
-                    list1 = list1.next;
-                }else{
-                    start = list2;
-                    temp = start;
+            if(res == null){
+
+                if(list1.val >= list2.val){
+                    res = list2;
                     list2 = list2.next;
+                }else{
+                    res = list1;
+                    list1 = list1.next;
                 }
+                head = res;
             }else{
-                // System.out.println(list1.val + " " + list2.val);
-                 if(list1.val < list2.val){
-                    temp.next = list1;
-                    temp = temp.next;
-                    list1 = list1.next;
-                }else{
-                    temp.next = list2;
-                    temp = temp.next;
+                if(list1.val >= list2.val){
+                    res.next = list2;
                     list2 = list2.next;
+                }else{
+                    res.next = list1;
+                    list1 = list1.next;
                 }
+                res = res.next;
             }
         }
 
         while(list1 != null){
-            temp.next = list1;
-            temp = temp.next;
+            res.next = list1;
             list1 = list1.next;
+            res = res.next;
         }
 
         while(list2 != null){
-            temp.next = list2;
-            temp = temp.next;
+            res.next = list2;
             list2 = list2.next;
+            res = res.next;
         }
 
-        return start;
+        return head;
+        
     }
 }
