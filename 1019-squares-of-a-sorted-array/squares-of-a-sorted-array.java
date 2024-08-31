@@ -1,37 +1,42 @@
 class Solution {
-    public int[] sortedSquares(int[] nums) {
-        int[] ans = new int[nums.length];
-        int left = 0;
-        int right = 0;
+    public int[] sortedSquares(int[] A) {
+        int N = A.length;
+        int[] ans = new int[N];
+
         int i = 0;
-        while(i < nums.length && nums[i] < 0){
-            i++;
+        int j = 0;
+
+        while(j < N && A[j] < 0){
+            j++;
         }
 
-        left = i - 1;
-        right = i;
-        i = 0;
-        while(i < nums.length && left >= 0 && right < nums.length){
-            if(Math.abs(nums[left]) >= nums[right]){
-                ans[i] = nums[right]*nums[right];
-                right++;
+        i = j - 1;
+
+        int k = 0;
+        while(i >= 0 && j < N){
+            int a = Math.abs(A[i]);
+            int b = Math.abs(A[j]);
+
+            if(a < b){
+                ans[k] = a*a;
+                i--;
             }else{
-                ans[i] = nums[left]*nums[left];
-                left--;
+                ans[k] = b*b;
+                j++;
             }
-            i++;
+            k++;
         }
 
-        while(left >= 0){
-            ans[i] = nums[left]*nums[left];
-            i++;
-            left--;
+        while(i >= 0){
+            ans[k] = A[i] * A[i];
+            i--;
+            k++;
         }
 
-        while(right < nums.length){
-            ans[i] = nums[right]*nums[right];
-            i++;
-            right++;
+        while(j < N){
+            ans[k] = A[j] * A[j];
+            j++;
+            k++;
         }
 
         return ans;
