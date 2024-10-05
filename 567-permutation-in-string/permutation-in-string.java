@@ -1,63 +1,57 @@
 class Solution {
     public boolean checkInclusion(String s1, String s2) {
         
-        int N = s2.length();
+        int N1 = s1.length();
+        int N2 = s2.length();
+
+        Map<Character, Integer> hm1 = new HashMap<Character, Integer>();
+        for(int i = 0; i < N1; i++){
+            hm1.put(s1.charAt(i), hm1.getOrDefault(s1.charAt(i), 0) + 1);
+        }
+
+        Map<Character, Integer> hm2 = new HashMap<Character, Integer>();
         int l = 0;
         int r = 0;
-        int k = s1.length();
-        int t = 97;
 
-        int target = 0;
-        Map<Character, Integer> map1 = new HashMap<Character, Integer>();
-        Map<Character, Integer> map2 = new HashMap<Character, Integer>();
-
-        for(int i = 0; i < s1.length(); i++){
-            target += (t - s1.charAt(i));
-            map1.put(s1.charAt(i), map1.getOrDefault(s1.charAt(i), 0) + 1);
-        }
-
-        int sum = 0;
-
-        while(r < N){
-
-            if(sum == target){
-                boolean match = true;
-                for(Map.Entry<Character, Integer> e: map1.entrySet()){
-                    boolean exists = e.getValue() == (map2.get(e.getKey()) == null ? -1 : map2.get(e.getKey()));
-                    match = match && exists;                
-                }
-
-                if(match){
-                    return true;
-                }
-            }
-            if(r < k){
-                sum += (t - s2.charAt(r));
-                map2.put(s2.charAt(r), map2.getOrDefault(s2.charAt(r), 0) + 1);
+        while(r < N2){
+            
+            if(r - l < N1){
+                char ch = s2.charAt(r);
+                hm2.put(ch, hm2.getOrDefault(ch, 0) + 1);
                 r++;
             }else{
-                sum -= (t - s2.charAt(l));
-                map2.put(s2.charAt(l), map2.get(s2.charAt(l)) - 1);
+
+                if(hm1.size() == hm2.size() && compareMap(hm1, hm2)){
+                    return true;
+                }
+
+                char ch = s2.charAt(l);
+                hm2.put(ch, hm2.get(ch) - 1);
                 l++;
 
-                sum += (t - s2.charAt(r));
-                map2.put(s2.charAt(r), map2.getOrDefault(s2.charAt(r), 0) + 1);
+                if(hm2.get(ch) == 0){
+                    hm2.remove(ch);
+                }
+
+                char ch1 = s2.charAt(r);
+                hm2.put(ch1, hm2.getOrDefault(ch1, 0) + 1);
                 r++;
             }
         }
+        if(hm1.size() == hm2.size() && compareMap(hm1, hm2)){
+            return true;
+        }
+        return false;
+    }
 
-        if(sum == target){
-            boolean match = true;
-            for(Map.Entry<Character, Integer> e: map1.entrySet()){
-                boolean exists = e.getValue() == (map2.get(e.getKey()) == null ? -1 : map2.get(e.getKey()));
-                match = match && exists;
-            }
+    public boolean compareMap(Map<Character, Integer> hm1, Map<Character, Integer> hm2){
 
-            if(match){
-                return true;
+        for(Map.Entry<Character, Integer> e: hm2.entrySet()){
+            if(hm1.get(e.getKey()) == null || hm1.get(e.getKey()) > e.getValue()){
+                return false;
             }
         }
 
-        return false;
+        return true;
     }
 }
