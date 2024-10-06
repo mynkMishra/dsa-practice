@@ -1,12 +1,5 @@
 class Solution {
     public int[] searchRange(int[] nums, int target) {
-
-        if(nums.length == 0){
-            int[] arr = new int[2];
-            arr[0] = -1;
-            arr[1] = -1;
-            return arr;
-        }
         
         int N = nums.length;
         int l = 0;
