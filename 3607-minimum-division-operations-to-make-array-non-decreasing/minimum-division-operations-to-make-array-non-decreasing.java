@@ -33,9 +33,9 @@ class Solution {
                     return i;
                 }
 
-                if((num/i) < num){
-                    return num/i;
-                }
+                // if((num/i) < num){
+                //     return num/i;
+                // }
             }
         }
 
