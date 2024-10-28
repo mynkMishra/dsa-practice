@@ -10,20 +10,15 @@ class Solution {
         }
 
         for(int i = 2; i < 350; i++){
-            if(hs.contains(i)){
-                solve(i, hs, 1);
+            int el = i;
+            int count = 0;
+            while(hs.contains(el)){
+                count++;
+                el = el*el;
+                ans = Math.max(ans, count);
             }
         }
 
         return ans < 2 ? -1 : ans;
-    }
-
-    public void solve(int el, Set<Integer> hs, int count){
-
-        if(hs.contains(el*el)){
-            solve(el*el, hs, count + 1);
-        }
-
-        ans = Math.max(ans, count);
     }
 }
