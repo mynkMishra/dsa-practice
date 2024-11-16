@@ -1,31 +1,33 @@
 class Solution {
+
+    List<Integer> list;
+    List<List<Integer>> ans;
     public List<List<Integer>> subsets(int[] nums) {
+        list = new ArrayList<Integer>();
+        ans = new ArrayList<List<Integer>>();
+
+        ans.add(new ArrayList<Integer>(list));
+        for(int i = 0; i < nums.length; i++){
+            list.add(nums[i]);
+            solve(i, nums);
+            list.remove(list.size() - 1);
+        }
         
-        return create(0, nums);
-    }  
+        return ans;
+    }
 
-    public List<List<Integer>> create(int i, int[] nums){
+    public void solve(int idx, int[] nums){
 
-        if(i == nums.length){
-            List<List<Integer>> res = new ArrayList<List<Integer>>();
-            res.add(new ArrayList<Integer>());
-            return res;
+        ans.add(new ArrayList<Integer>(list));
+        if(idx == nums.length){
+            return;
         }
 
-        List<List<Integer>> res = new ArrayList<List<Integer>>();
-
-        List<List<Integer>> list = create(i + 1, nums);
-
-        for(List<Integer> l: list){
-            List<Integer> r = new ArrayList<Integer>();
-            r.add(nums[i]);
-            for(Integer t: l){
-                r.add(t);
-            }
-            res.add(r);
-            res.add(l);
+        for(int i = idx + 1; i < nums.length; i++){
+            list.add(nums[i]);
+            solve(i, nums);
+            list.remove(list.size() - 1);
         }
-
-        return res;
+        
     }
 }
