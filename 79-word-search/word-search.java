@@ -1,13 +1,15 @@
 class Solution {
     public boolean exist(char[][] board, String word) {
-        
-        for(int i = 0; i < board.length; i++){
-            for(int j = 0; j < board[0].length; j++){
-                if(board[i][j] == word.charAt(0)){
-                    boolean res = find(board, i, j, 0, word);
-                    if(res){
-                        return true;
-                    }
+
+        int N = board.length;
+        int M = board[0].length;
+
+        boolean[][] visited = new boolean[N][M];
+
+        for(int i = 0; i < N; i++){
+            for(int j = 0; j < M; j++){
+                if(board[i][j] == word.charAt(0) && solve(i, j, 0, visited, board, word)){
+                    return true;
                 }
             }
         }
@@ -15,33 +17,30 @@ class Solution {
         return false;
     }
 
-    public boolean find(char[][] board, int i, int j, int idx, String word){
+    public boolean solve(int i, int j, int idx, boolean[][] visited, char[][] board, String word){
 
         if(idx == word.length()){
             return true;
         }
 
-        if(i == board.length || j == board[0].length || i < 0 || j < 0){
+        if(i < 0 || j < 0 || i >= board.length || j >= board[0].length){
             return false;
         }
 
-        boolean res = false;
-        if(board[i][j] == word.charAt(idx)){
-            board[i][j] = '#';
-            // if(i + 1 < board.length){
-                res = (res || find(board, i + 1, j, idx + 1, word));
-            // }
-            // if(j + 1 < board[0].length){
-                res = (res || find(board, i, j + 1, idx + 1, word));
-            // }
-            // if(i - 1 >= 0){
-                res = (res || find(board, i - 1, j, idx + 1, word));
-            // }
-            // if(j - 1 >= 0){
-                res = (res || find(board, i, j - 1, idx + 1, word));
-            // }
-            board[i][j] = word.charAt(idx);
+        if(visited[i][j] || board[i][j] != word.charAt(idx)){
+            return false;
         }
+
+        visited[i][j] = true;
+        boolean res = solve(i + 1, j, idx + 1, visited, board, word) ||
+        solve(i - 1, j, idx + 1, visited, board, word) || 
+        solve(i, j + 1, idx + 1, visited, board, word) ||
+        solve(i, j - 1, idx + 1, visited, board, word);
+
+        if(!res){
+            visited[i][j] = false;
+        }
+
         return res;
     }
 }
