@@ -28,7 +28,7 @@ class Solution {
         int ans = Integer.MIN_VALUE;
 
         while(l < N && r < N){
-            System.out.println(l + " " + r + " " + count);
+            // System.out.println(l + " " + r + " " + count);
             if(count == 3){
                 ans = Math.max(ans, r - l);
                 int idx = s.charAt(r) - 'a';
