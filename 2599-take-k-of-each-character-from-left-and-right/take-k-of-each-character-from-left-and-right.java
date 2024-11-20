@@ -3,68 +3,52 @@ class Solution {
         if(k == 0){
             return 0;
         }
+        int[] arr = new int[3];
 
-        int l = 0;
-        int r = s.length();
-
-        while(l<=r){
-            int mid = l + (r - l)/2;
-
-            // if((mid == 1 || !valid(mid - 1, k, s)) && valid(mid, k, s)){
-            //     return mid;
-            // }
-
-            if(valid(mid, k, s)){
-                r = mid - 1;
-            }else{
-                l = mid + 1;
-            }
+        for(int i = 0; i < s.length(); i++){
+            int idx = s.charAt(i) - 'a';
+            arr[idx]++;
         }
-
-        return l > s.length() ? -1 : l;
-    }
-
-    public boolean valid(int len, int k, String s){
-
-        Map<String, Integer> hm = new HashMap<String, Integer>();
 
         int count = 0;
-        for(int i = 0; i < len; i++){
-            String str = s.substring(i, i + 1);
-            hm.put(str, hm.getOrDefault(str, 0) + 1);
-
-            if(hm.get(str) == k){
+        for(int i = 0; i < arr.length; i++){
+            if(arr[i] >= k){
                 count++;
             }
         }
 
-        int l = len - 1;
-        int r = s.length() - 1;
+        if(count < 3){
+            return -1;
+        }
 
-        while(l >= 0){
+        int l = 0;
+        int r = 0;
+        int N = s.length();
+        int[] aux = new int[3];
+        int ans = Integer.MIN_VALUE;
+
+        while(l < N && r < N){
+            System.out.println(l + " " + r + " " + count);
             if(count == 3){
-                return true;
-            }
-            String strl = s.substring(l, l + 1);
-            if(hm.get(strl) == k){
-                count--;
-            }
-            hm.put(strl, hm.getOrDefault(strl, 0) - 1);
-            l--;
-
-            String strr = s.substring(r, r + 1);
-            hm.put(strr, hm.getOrDefault(strr, 0) + 1);
-            r--;
-
-            if(hm.get(strr) == k){
-                count++;
+                ans = Math.max(ans, r - l);
+                int idx = s.charAt(r) - 'a';
+                aux[idx]++;
+                if(arr[idx] - aux[idx] < k){
+                    count--;
+                }
+                r++;
+            }else{
+                int idx = s.charAt(l) - 'a';
+                aux[idx]--;
+                if(arr[idx] - aux[idx] == k){
+                    count++;
+                }
+                l++;                
             }
         }
-
         if(count == 3){
-            return true;
+            ans = Math.max(ans, r - l);
         }
-
-        return false;
+        return N - ans;
     }
 }
