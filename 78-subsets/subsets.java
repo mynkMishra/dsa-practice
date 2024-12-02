@@ -6,12 +6,7 @@ class Solution {
         list = new ArrayList<Integer>();
         ans = new ArrayList<List<Integer>>();
 
-        ans.add(new ArrayList<Integer>(list));
-        for(int i = 0; i < nums.length; i++){
-            list.add(nums[i]);
-            solve(i, nums);
-            list.remove(list.size() - 1);
-        }
+        solve(-1, nums);
         
         return ans;
     }
