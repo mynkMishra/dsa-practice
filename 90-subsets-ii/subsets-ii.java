@@ -10,16 +10,16 @@ class Solution {
         ans = new ArrayList<List<Integer>>();
         hm = new HashMap<String, Integer>();
 
-        ans.add(new ArrayList<Integer>(list));
-        for(int i = 0; i < nums.length; i++){
-            if(hm.get("" + nums[i]) == null){
-                hm.put("" + nums[i], 1);
-                list.add(nums[i]);
-                solve(i, "" + nums[i], nums);
-                list.remove(list.size() - 1);
-                // hm.remove("" + nums[i]);
-            }
-        }
+        // for(int i = 0; i < nums.length; i++){
+        //     if(hm.get("" + nums[i]) == null){
+        //         hm.put("" + nums[i], 1);
+        //         list.add(nums[i]);
+        //         solve(i, "" + nums[i], nums);
+        //         list.remove(list.size() - 1);
+        //         // hm.remove("" + nums[i]);
+        //     }
+        // }
+        solve(-1, "", nums);
 
         return ans;
     }
