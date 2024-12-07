@@ -2,33 +2,27 @@
       boolean knows(int a, int b); */
 
 public class Solution extends Relation {
+
+    int possibleCeleb = 0;
+    int candidateCount = -1;
     public int findCelebrity(int n) {
-        
-        int ans = -1;
-        int[] indgree = new int[n];
-        int[] outdgree = new int[n];
+        candidateCount = 0;
 
         for(int i = 0; i < n; i++){
-            for(int j = 0; j < n; j++){
-                if(i != j && knows(i,j)){
-                    indgree[j]++;
-                    outdgree[i]++;
+            if(knows(possibleCeleb, i)){
+                possibleCeleb = i;
+            }
+        }
+
+        for(int i = 0; i < n; i++){
+            if(i != possibleCeleb){
+                boolean flag = knows(i, possibleCeleb) && !knows(possibleCeleb, i);
+                if(!flag){
+                    return -1;
                 }
             }
         }
-        
-        int count = 0;
-        for(int i = 0; i < n; i++){
-            if(indgree[i] == n - 1 && outdgree[i] == 0){
-                ans = i;
-                count++;
-            }
-        }
 
-        if(count > 1){
-            return -1;
-        }
-
-        return ans;
+        return possibleCeleb;
     }
 }
