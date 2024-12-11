@@ -13,13 +13,10 @@ class Solution {
             prefix[max + limit + 2]--;
         }
 
+        int ans = -1;
         for(int i = 1; i < prefix.length; i++){
             prefix[i] = prefix[i] + prefix[i - 1];
-        }
-
-        int ans = -1;
-        for(int el: prefix){
-            ans = Math.max(ans, el);
+            ans = Math.max(ans, prefix[i]);
         }
 
         return ans;
