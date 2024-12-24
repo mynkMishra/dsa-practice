@@ -12,7 +12,6 @@ class Solution {
         int diameterN = N == 0 ? 0 : findDiameter(N, adjListN);
         int diameterM = M == 0 ? 0 : findDiameter(M, adjListM);
 
-        // System.out.println(diameterN + " " + diameterM);
         int minN = (diameterN & 1) == 0 ? diameterN/2 : (diameterN + 1)/2;
         int minM = (diameterM & 1) == 0 ? diameterM/2 : (diameterM + 1)/2;
         int newDiameter = minN + minM + 1;
@@ -44,10 +43,8 @@ class Solution {
         findNodeDistFrom(node, visited, dist, adjList);
         int diameter = Integer.MIN_VALUE;
 
-        // System.out.println(N);
         for(int i = 0; i <= N; i++){
             int el = dist[i];
-            // System.out.println(i + " " + el);
             diameter = Math.max(diameter, el);
         }
 
