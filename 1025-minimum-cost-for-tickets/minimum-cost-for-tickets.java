@@ -1,45 +1,36 @@
 class Solution {
-
-    int[][] dp;
-    int tripCost = Integer.MAX_VALUE;
     public int mincostTickets(int[] days, int[] costs) {
-        int N = days.length;
-        dp = new int[N][366];
+        
+        int[][] memo = new int[days.length][366];
 
-        for(int[] d: dp){
+        for(int[] d: memo){
             Arrays.fill(d, -1);
         }
-        
-        tripCost = solve(0, 0, days, costs);
-        return tripCost;
+        return dp(0, 0, days, costs, memo);
     }
 
-    public int solve(int idx, int nextDay, int[] days, int[] costs){
+    public int dp(int currDay, int idx, int[] days, int[] costs, int[][] memo){
 
-        if(idx >= days.length || nextDay > 365){
+        if(idx == days.length || currDay > 365){
             return 0;
         }
 
-        if(dp[idx][nextDay] != -1){
-            return dp[idx][nextDay];
+        if(memo[idx][currDay] != -1){
+            return memo[idx][currDay];
         }
 
-        int amount = 0;
+        int op1 = currDay > days[idx] 
+                    ? dp(currDay, idx + 1, days, costs, memo) 
+                    : dp(days[idx] + 1, idx, days, costs, memo) + costs[0];
+        
+        int op2 = currDay > days[idx] 
+                    ? dp(currDay, idx + 1, days, costs, memo) 
+                    : dp(days[idx] + 7, idx, days, costs, memo) + costs[1];
 
-        if(days[idx] >= nextDay){
-            // include
-            int day = solve(idx + 1, days[idx] + 1, days, costs) + costs[0];
-
-            int week = solve(idx + 1, days[idx] + 7, days, costs) + costs[1];
-
-            int month = solve(idx + 1, days[idx] + 30, days, costs) + costs[2];
-
-            amount = Math.min(day, Math.min(week, month));
-        }else{
-            // exclude
-            amount = solve(idx + 1, nextDay, days, costs);
-        }
-
-        return dp[idx][nextDay] = amount;
+        int op3 = currDay > days[idx] 
+                    ? dp(currDay, idx + 1, days, costs, memo) 
+                    : dp(days[idx] + 30, idx, days, costs, memo) + costs[2];
+        
+        return memo[idx][currDay] = Math.min(op1, Math.min(op2, op3));
     }
 }
