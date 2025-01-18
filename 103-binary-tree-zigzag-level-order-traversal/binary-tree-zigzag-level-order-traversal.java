@@ -15,53 +15,57 @@
  */
 class Solution {
     public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
-        
+
         List<List<Integer>> ans = new ArrayList<List<Integer>>();
         if(root == null){
             return ans;
         }
 
         LinkedList<TreeNode> queue = new LinkedList<TreeNode>();
+        int lvl = 0;
         queue.addLast(root);
-        boolean flag = false;
 
         while(queue.size() > 0){
-            int size = queue.size();
-            LinkedList<TreeNode> q = new LinkedList<TreeNode>();
-
             List<Integer> l = new ArrayList<Integer>();
-            for(int i = 0; i < size; i++){
-                if(!flag){
-                   TreeNode node = queue.removeFirst();
-                    l.add(node.val);
+            
+            int size = queue.size();
 
-                    if(node.left != null){
-                        q.addFirst(node.left);
-                    }
+            while(size > 0){
+                TreeNode el = queue.removeFirst();
+                l.add(el.val);
 
-                    if(node.right != null){
-                        q.addFirst(node.right);
+                if(lvl%2 == 0){
+                    if(el.left != null){
+                        queue.addLast(el.left);
                     }
-                   
+                    
+                    if(el.right != null){
+                        queue.addLast(el.right);
+                    }
+                    
                 }else{
-                   TreeNode node = queue.removeFirst();
-                   l.add(node.val);
 
-                   if(node.right != null){
-                        q.addFirst(node.right);
-                   }
-
-                    if(node.left != null){
-                        q.addFirst(node.left);
+                    if(el.right != null){
+                        queue.addLast(el.right);
                     }
-                   
-                   
+                    
+                     if(el.left != null){
+                        queue.addLast(el.left);
+                    }
+                    
                 }
+                size--;
             }
 
-            queue = q;
             ans.add(l);
-            flag = !flag;
+            
+            LinkedList<TreeNode> aux = new LinkedList<TreeNode>();
+            while(queue.size() > 0){
+                aux.addLast(queue.removeLast());
+            }
+
+            queue = aux;
+            lvl++;
         }
 
         return ans;
