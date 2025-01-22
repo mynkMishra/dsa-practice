@@ -36,12 +36,8 @@ class Solution {
                 int ni = i + d[0];
                 int nj = j + d[1];
 
-                if(isValid(ni, nj, N, M) && !visited[ni][nj]){
-                    if(height[ni][nj] == 0){
-                        minH.add(new int[]{ni, nj, 0});
-                    }else{
-                        minH.add(new int[]{ni, nj, h + 1});
-                    }
+                if(isValid(ni, nj, N, M) && height[ni][nj] != 0 && !visited[ni][nj]){
+                    minH.add(new int[]{ni, nj, h + 1});
                 }
             }
         }
