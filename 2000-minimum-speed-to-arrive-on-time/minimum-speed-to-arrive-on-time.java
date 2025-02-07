@@ -1,42 +1,56 @@
 class Solution {
     public int minSpeedOnTime(int[] dist, double hour) {
         
-        int l = 1;
-        int r = 10000000;
-        int minSpeed = -1;
+        int l = 0;
+        int total = 0;
 
-        while(l<=r){
+        for(int el: dist){
+            total += el;
+        }
+
+        double h = (double)total/(double)hour;
+
+        l = (int)Math.floor(h);
+
+        int r = Integer.MIN_VALUE;
+
+        for(int d: dist){
+            r = Math.max(d, r);
+        }
+
+        r = r*100;
+
+        while(l <= r){
             int mid = l + (r - l)/2;
+            if((mid != 0 && !isValidSpeed(mid - 1, dist, hour)) && isValidSpeed(mid, dist, hour)){
+                return mid;
+            }
 
-            if(findSpeed(dist, mid, hour)){
-                minSpeed = mid;
+            if(isValidSpeed(mid, dist, hour)){
                 r = mid - 1;
             }else{
                 l = mid + 1;
             }
         }
 
-        return minSpeed;
+        return -1;
     }
 
-    public boolean findSpeed(int[] dist, int speed, double hour){
+    public boolean isValidSpeed(int minSpeed, int[] dist, double hour){
 
-        double time = 0;
+        double totalHour = 0;
 
-        for(int i = 0; i < dist.length; i++){
-            double r = ((double)dist[i]/(double)speed);
-            
-            if(i != dist.length - 1){
-                time += Math.ceil(r);
-            }else{
-                time += r;
-            }
+        for(int i = 0; i < dist.length - 1; i++){
+
+            int d = dist[i];
+            int t = (int)Math.ceil(((double)d/(double)minSpeed));
+
+            totalHour += (double)t;
         }
 
-        if(time > hour){
-            return false;
-        }
+        double d = (double)dist[dist.length - 1]/(double)minSpeed;
+        totalHour += d;
 
-        return true;
+        return totalHour <= hour;
     }
 }
