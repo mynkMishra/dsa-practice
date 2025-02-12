@@ -4,26 +4,17 @@ class Solution {
     public int integerBreak(int n) {
         dp = new int[n + 1];
         Arrays.fill(dp, -1);
+        dp[1] = 1;
+        dp[2] = 1;
+        dp[0] = 0;
 
-        int ans = Integer.MIN_VALUE;
-        for(int i = 1; i < n; i++){
-            ans = Math.max(ans, solve(n - i)*i);
+        int res = Integer.MIN_VALUE;
+        for(int i = 3; i <= n; i++){
+            for(int j = 1; j <= i; j++){
+                dp[i] = Math.max(dp[i], Math.max(dp[i - j], i - j)*j);
+            }
         }
 
-        return ans;
-    }
-
-    public int solve(int n){
-
-        if(dp[n] != -1){
-            return dp[n];
-        }
-        
-        int ans = n;
-        for(int i = 1; i < n; i++){
-            ans = Math.max(ans, solve(n - i)*i);
-        }
-
-        return dp[n] = ans;
+        return dp[n];
     }
 }
