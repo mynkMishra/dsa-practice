@@ -1,17 +1,11 @@
 class Solution {
 
     int res = Integer.MIN_VALUE;
-    int[][] dp;
     Map<Integer, Integer> hm = new HashMap<Integer, Integer>();
 
     public int lenLongestFibSubseq(int[] arr) {
         
         int N = arr.length;
-        dp = new int[N + 1][N + 1];
-
-        for(int[] d: dp){
-            Arrays.fill(d, -1);
-        }
 
         for(int i = 0; i < arr.length; i++){
             hm.put(arr[i], i);
