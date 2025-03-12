@@ -2,38 +2,42 @@ class Solution {
     public List<List<Integer>> threeSum(int[] nums) {
         
         Arrays.sort(nums);
-        int N  = nums.length;
-        List<List<Integer>> list = new ArrayList<List<Integer>>();
-        Map<String, Integer> map = new HashMap<String, Integer>();
+        List<List<Integer>> list = new ArrayList<>();
 
-        for(int i = 0; i < N - 2; i++){
-            int j = i + 1;
-            int k = N - 1;
-            
-            while(j < k){
-                int sum = nums[i] + nums[j] + nums[k];
+        for(int i = 0; i < nums.length; i++){
+            if(i == 0 || nums[i - 1] != nums[i]){
+                int sum = -nums[i];
+                int l = i + 1;
+                int r = nums.length - 1;
 
-                if(sum < 0){
-                    j++;
-                }else if(sum > 0){
-                    k--;
-                }else{
+                while(l < r){
+                    if(nums[l] + nums[r] > sum){
+                        r--;
+                    }else if(nums[l] + nums[r] < sum){
+                        l++;
+                    }else{
 
-                    String key = nums[i] + "#" + nums[j] + "#" + nums[k];
-                    if(map.get(key) == null){
-                        List<Integer> l = new ArrayList<Integer>();
-                        l.add(nums[i]);
-                        l.add(nums[j]);
-                        l.add(nums[k]);
-                        list.add(l);
-                        map.put(key, 1);
+                        while(l < r && nums[l] == nums[l + 1]){
+                            l++;
+                        }
+
+                        while(l < r && nums[r - 1] == nums[r]){
+                            r--;
+                        }
+                        List<Integer> li = new ArrayList<>();
+                        li.add(nums[i]);
+                        li.add(nums[l]);
+                        li.add(nums[r]);
+
+                        l++;
+                        r--;
+
+                        list.add(li);
                     }
-                    
-                    j++;
                 }
             }
         }
-        
+
         return list;
     }
 }
