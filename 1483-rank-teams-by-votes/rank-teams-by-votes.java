@@ -1,33 +1,44 @@
 class Solution {
     public String rankTeams(String[] votes) {
-        
-        int N = votes.length;
-        int len = votes[0].length();
-        int[][] counter = new int[26][len + 1];
-        for(int i = 0; i < 26; i++) counter[i][len] = i;
+        int[][] map = new int[26][28];
 
-        for(String vote: votes){
-            for(int i = 0; i < len; i++){
-                char ch = vote.charAt(i);
-                int idx = (int)ch - 65;
-                counter[idx][i]++;
+        for(int i = 0; i < 26; i++){
+            map[i][26] = i;
+        }
+
+        for(String v: votes){
+
+            for(int i = 0; i < v.length(); i++){
+                char ch = v.charAt(i);
+                int idx = ch - 'A';
+                map[idx][i]++;
+                if(map[idx][27] == 0){
+                    map[idx][27] = 1;
+                }
             }
         }
 
-        Arrays.sort(counter, (a, b) -> {
-            for(int i = 0; i < len; i++){
-                if(a[i] < b[i]) return 1;
-                if(a[i] > b[i]) return -1;
+        Arrays.sort(map, (a, b) -> {
+            for(int i = 0; i < 26; i ++){
+                if(a[i] < b[i]){
+                    return 1;
+                }else if(a[i] > b[i]){
+                    return -1;
+                }
             }
 
             return 0;
         });
 
-        StringBuilder sb = new StringBuilder();
-        for(int i = 0; i < len; i++){
-            sb.append((char)('A' + counter[i][len]));
+
+        String str = "";
+        for(int i = 0; i < 26; i++){
+            if(map[i][27] == 1){
+                str += (char)(map[i][26] + 'A');
+            }
         }
 
-        return sb.toString();
+        return str;
+
     }
 }
