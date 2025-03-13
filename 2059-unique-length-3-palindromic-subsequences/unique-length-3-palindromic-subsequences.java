@@ -1,44 +1,57 @@
 class Solution {
     public int countPalindromicSubsequence(String s) {
-        int[] first = new int[26];
-        int[] last = new int[26];
 
-        Arrays.fill(first, -1);
-        Arrays.fill(last, -1);
+        int N = s.length();
+        int[][] map = new int[N][26];
+        Map<Integer, List<Integer>> hm = new HashMap<>();
+
+        for(int i = 0; i < 26; i++){
+            hm.put(i, new ArrayList<Integer>());
+        }
 
         for(int i = 0; i < s.length(); i++){
-            char ch = s.charAt(i);
-            int ascii = ch - 'a';
-            if(first[ascii] == -1){
-                first[ascii] = i;
+            int idx = s.charAt(i) - 'a';
+            hm.get(idx).add(i);
+            for(int j = 0; j < 26; j++){
+                if(j == idx){
+                    map[i][j] = i == 0 ? 1 : map[i - 1][j] + 1;
+                }else{
+                    map[i][j] = i == 0 ? 0 : map[i - 1][j];
+                }
             }
         }
 
-        for(int i = s.length() - 1; i >= 0; i--){
-            char ch = s.charAt(i);
-            int ascii = ch - 'a';
-            if(last[ascii] == -1){
-                last[ascii] = i;
-            }
-        }
+        Set<String> hs = new HashSet<>();
 
-        int ans = 0;
-        for(int i = 0; i < 26; i++){
-            if(first[i] != -1 && last[i] != -1 && last[i] - first[i] >= 2){
-                int l = first[i];
-                int r = last[i];
-                Set<Character> hs = new HashSet<Character>();
+        for(int k = 0; k < hm.size(); k++){
+            List<Integer> idxs = hm.get(k);
 
-                for(int k = l + 1; k < r; k++){
-                    char ch = s.charAt(k);
-                    if(!hs.contains(ch)){
-                        ans++;
-                        hs.add(ch);
+            if(idxs.size() > 0){
+                for(int i = 1; i < idxs.size(); i++){
+                    int l = idxs.get(i - 1);
+                    int r = idxs.get(i);
+
+                    if(r - l > 1){
+                        for(int j = 0; j < 26; j++){
+                            if(k != j && map[r][j] - map[l][j] > 0){
+                                String p = (char)(k + 'a') + "" + (char)(j + 'a') + "" + (char)(k + 'a');
+                                if(!hs.contains(p)){
+                                    hs.add(p);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if(idxs.size() > 2){
+                    String p = (char)(k + 'a') + "" + (char)(k + 'a') + "" + (char)(k + 'a');
+                    if(!hs.contains(p)){
+                        hs.add(p);
                     }
                 }
             }
         }
 
-        return ans;
+        return hs.size();
     }
 }
