@@ -1,50 +1,53 @@
 class Solution {
     public boolean canChange(String start, String target) {
-        
-        int startIdx = 0;
-        int targetIdx = 0;
+        int sIdx = 0;
+        int tIdx = 0;
 
-        while(startIdx < start.length() && targetIdx < target.length()){
+        while(sIdx < start.length() && tIdx < target.length()){
+            
+            if(target.charAt(tIdx) == 'L'){
+                while(sIdx < start.length() && start.charAt(sIdx) == '_'){
+                    sIdx++;
+                }
 
-            while(startIdx < start.length() && start.charAt(startIdx) == '_'){
-                startIdx++;
-            }
-
-            while(targetIdx < target.length() && target.charAt(targetIdx) == '_'){
-                targetIdx++;
-            }
-
-            if(startIdx == start.length() || targetIdx == target.length()){
-                return startIdx == start.length() && targetIdx == target.length();
-            }
-
-            if(start.charAt(startIdx) == target.charAt(targetIdx)){
-                if(start.charAt(startIdx) == 'L' && startIdx < targetIdx){
+                if(sIdx == start.length() || start.charAt(sIdx) == 'R'){
                     return false;
                 }
 
-                if(start.charAt(startIdx) == 'R' && startIdx > targetIdx){
+                if(tIdx > sIdx){
+                    return false;
+                }
+                sIdx++;
+            }else if(target.charAt(tIdx) == 'R'){
+                while(sIdx < start.length() && start.charAt(sIdx) == '_'){
+                    sIdx++;
+                }
+
+                if(sIdx == start.length() || start.charAt(sIdx) == 'L'){
                     return false;
                 }
 
-                startIdx++;
-                targetIdx++;
+                if(tIdx < sIdx){
+                    return false;
+                }
+                sIdx++;
+            }
 
-            }else{
+            tIdx++;
+        }
+
+        while(sIdx < start.length()){
+            if(start.charAt(sIdx) != '_'){
                 return false;
             }
+            sIdx++;
         }
 
-        while(startIdx < start.length() && start.charAt(startIdx) == '_'){
-            startIdx++;
-        }
-
-        while(targetIdx < target.length() && target.charAt(targetIdx) == '_'){
-            targetIdx++;
-        }
-
-        if(startIdx != start.length() || targetIdx != target.length()){
-            return false;
+        while(tIdx < target.length()){
+            if(target.charAt(tIdx) != '_'){
+                return false;
+            }
+            tIdx++;
         }
 
         return true;
