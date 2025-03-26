@@ -20,16 +20,6 @@ class Solution {
         }
 
         for(int[] r: grid){
-            for(int v: r){
-                if(rem == -1){
-                    rem = v%x;
-                }else if(v%x != rem){
-                    return -1;
-                }
-            }
-        }
-
-        for(int[] r: grid){
             for(int i = 0; i < r.length; i++){
                 r[i] -= rem;
             }
