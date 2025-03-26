@@ -5,15 +5,11 @@ class Solution {
         dp = new int[nums.length];
         Arrays.fill(dp, -1);
 
-        return solve(0, nums);
+        int idx = 0;
+        return run(0, nums);
     }
 
-    public boolean solve(int idx, int[] nums){
-
-        if(idx == nums.length){
-            return false;
-        }
-
+    public boolean run(int idx, int[] nums){
         if(idx == nums.length - 1){
             return true;
         }
@@ -22,12 +18,16 @@ class Solution {
             return dp[idx] == 1;
         }
 
-        boolean ans = false;
+        boolean isValid = false;
         for(int i = 1; i <= nums[idx]; i++){
-            ans = ans || solve(idx + i, nums);
+            isValid = isValid || run(idx + i, nums);
+            if(isValid){
+                return true;
+            }
         }
-        dp[idx] = ans ? 1 : 0;
 
-        return dp[idx] == 1;
+        dp[idx] = isValid ? 1 : 0;
+
+        return isValid;
     }
 }
