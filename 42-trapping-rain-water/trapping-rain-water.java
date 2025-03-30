@@ -1,31 +1,60 @@
 class Solution {
-    public int trap(int[] A) {
+    public int trap(int[] height) {
+        
+        int N = height.length;
+        int[] ngl = new int[N];
 
-        int N = A.length;
-        int[] left_max = new int[N];
-        int[] right_max = new int[N];
+        LinkedList<Integer> stack = new LinkedList<>();
 
-        int max = -1;
         for(int i = 0; i < N; i++){
-            left_max[i] = max;
-            max = Math.max(max, A[i]);
-        }
+            if(stack.size() == 0){
+                ngl[i] = -1;
+                stack.addLast(i);
+            }else{
+                while(stack.size() > 0 && height[stack.peekLast()] <= height[i]){
+                    stack.removeLast();
+                }
 
-        max = -1;
-        for(int i = N - 1; i >= 0; i--){
-            right_max[i] = max;
-            max = Math.max(max, A[i]);
-        }
-
-        int total = 0;
-        for(int i = 0; i < N; i++){
-            int vol = Math.min(left_max[i], right_max[i]) - A[i];
-
-            if(vol > 0){
-                total += vol;
+                if(stack.size() == 0){
+                    ngl[i] = -1;
+                    stack.addLast(i);
+                }else{
+                    ngl[i] = stack.peekLast();
+                }
             }
         }
 
-        return total;
+        stack.clear();
+
+        int[] ngr = new int[N];
+
+        for(int i = N - 1; i >= 0; i--){
+            if(stack.size() == 0){
+                ngr[i] = N;
+                stack.addLast(i);
+            }else{
+                while(stack.size() > 0 && height[stack.peekLast()] <= height[i]){
+                    stack.removeLast();
+                }
+
+                if(stack.size() == 0){
+                    ngr[i] = N;
+                    stack.addLast(i);
+                }else{
+                    ngr[i] = stack.peekLast();
+                }
+            }
+        }
+
+        int sum = 0;
+
+        for(int i = 0; i < N; i++){
+            System.out.println(ngl[i]);
+            if(ngl[i] != -1 && ngr[i] != N){
+                sum += (Math.min(height[ngr[i]], height[ngl[i]]) - height[i]);
+            }
+        }
+
+        return sum;
     }
 }
