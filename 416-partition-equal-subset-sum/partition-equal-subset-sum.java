@@ -1,7 +1,14 @@
 class Solution {
+
+    int[][] dp;
     public boolean canPartition(int[] nums) {
-        
         int sum = 0;
+        dp = new int[nums.length + 1][100000];
+
+        for(int[] a: dp){
+            Arrays.fill(a, -1);
+        }
+
         for(int el: nums){
             sum += el;
         }
@@ -10,26 +17,29 @@ class Solution {
             return false;
         }
 
-        int N = nums.length;
-        boolean[][] dp = new boolean[N + 1][sum/2 + 1];
-        dp[0][0] = true;
-        for(int i = 1; i <= N; i++){
-            for(int j = 0; j <= sum/2; j++){
-                if(j >= nums[i - 1]){
-                    dp[i][j] = dp[i - 1][j - nums[i - 1]] || dp[i - 1][j];
-                }else{
-                    dp[i][j] = dp[i - 1][j];
-                }  
-            }
+        return solve(0, sum/2, nums);
+    }
+
+    public boolean solve(int idx, int sum, int[] nums){
+
+        if(sum == 0){
+            return true;
         }
 
-        // for(int i = 0; i <= N; i++){
-        //     for(int j = 0; j <= sum/2; j++){
-        //         System.out.print(dp[i][j] + " ");  
-        //     }
-        //     System.out.println();
-        // }
+        if(sum < 0 || idx >= nums.length){
+            return false;
+        }
 
-        return dp[N][sum/2];
+        if(dp[idx][sum] != -1){
+            return dp[idx][sum] == 1;
+        }
+
+        boolean taken = solve(idx + 1, sum - nums[idx], nums);
+
+        boolean skip = solve(idx + 1, sum, nums);
+
+        dp[idx][sum] = (taken || skip) ? 1 : 0;
+
+        return taken || skip;
     }
 }
