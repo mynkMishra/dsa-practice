@@ -1,10 +1,11 @@
 # Write your MySQL query statement below
 
-WITH cte AS (
-    SELECT *, DENSE_RANK() OVER(PARTITION BY departmentId ORDER BY salary DESC) as num
-    FROM Employee
+WITH ranked AS (
+    SELECT d.name AS "Department", e.name AS "Employee", e.salary AS "Salary",
+    DENSE_RANK() OVER(PARTITION BY e.departmentId ORDER BY e.salary DESC) AS "seq"
+    FROM Employee e
+    JOIN Department d ON e.departmentId = d.id 
 )
-SELECT d.name AS Department, c.name AS Employee, salary AS Salary
-FROM cte c
-JOIN Department d ON c.departmentId = d.id
-WHERE num <= 3
+SELECT Department, Employee, Salary
+FROM ranked
+WHERE seq <= 3
