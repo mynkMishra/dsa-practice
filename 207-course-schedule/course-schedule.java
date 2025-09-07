@@ -2,48 +2,49 @@ class Solution {
 
     int[] visited;
     public boolean canFinish(int numCourses, int[][] prerequisites) {
+        
+        ArrayList<ArrayList<Integer>> adj = new ArrayList<ArrayList<Integer>>();
+
+        for(int i = 0; i < numCourses; i++){
+            adj.add(new ArrayList<Integer>());
+        }
+
+        for(int[] p: prerequisites){
+            int a = p[0];
+            int b = p[1];
+
+            adj.get(b).add(a);
+        }
+
         visited = new int[numCourses];
-        List<List<Integer>> graph = new ArrayList<List<Integer>>();
-
         for(int i = 0; i < numCourses; i++){
-            graph.add(new ArrayList<Integer>());
-        }
-
-        for(int[] pair: prerequisites){
-            graph.get(pair[1]).add(pair[0]);
-        }
-
-        for(int i = 0; i < numCourses; i++){
-            if(visited[i] == 0){
-                if(checkCycle(i, graph)){
-                    return false;
-                }
+            if(visited[i] == 0 && isCycle(i, adj)){
+                return false;
             }
         }
 
         return true;
     }
 
-    public boolean checkCycle(int node, List<List<Integer>> graph){
+    public boolean isCycle(int node, ArrayList<ArrayList<Integer>> adj){
 
         visited[node] = 1;
 
-        boolean isCycle = false;
-        for(int nb : graph.get(node)){
+        boolean flag = false;
+        for(int nb: adj.get(node)){
             if(visited[nb] == 1){
                 return true;
             }
-            
+
             if(visited[nb] == 0){
-                isCycle = isCycle || checkCycle(nb, graph);
-                if(isCycle){
+                flag = flag || isCycle(nb, adj);
+                if(flag){
                     return true;
                 }
             }
         }
+
         visited[node] = 2;
-        return isCycle;
+        return false;
     }
-
-
 }
