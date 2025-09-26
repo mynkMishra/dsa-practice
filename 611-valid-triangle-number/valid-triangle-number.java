@@ -7,7 +7,7 @@ class Solution {
 
         int sum = 0;
         for(int i = 0; i < N - 2; i++){
-            int k = i + 2;
+            int k = i + 1;
             for(int j = i + 1; j < N - 1 && nums[i] != 0; j++){
                 int idx = find(nums, nums[i] + nums[j], k, nums.length - 1);
 
