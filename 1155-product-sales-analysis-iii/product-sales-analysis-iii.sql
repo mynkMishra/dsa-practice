@@ -1,10 +1,10 @@
 # Write your MySQL query statement below
 
-
-WITH added_row_number AS (
-    SELECT *, RANK() OVER (PARTITION BY product_id ORDER BY year ASC) AS row_rank
-    FROM Sales
+WITH first_tab AS (
+    SELECT s.product_id, MIN(s.year) AS min_year
+    FROM Sales s
+    GROUP BY s.product_id
 )
-SELECT product_id, year AS first_year, quantity, price 
-FROM added_row_number
-WHERE row_rank = 1;
+SELECT s.product_id, s.year AS 'first_year', s.quantity, s.price 
+FROM Sales s
+JOIN first_tab ft ON s.product_id = ft.product_id AND s.year = ft.min_year
