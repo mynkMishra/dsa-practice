@@ -1,33 +1,25 @@
 class Solution {
     public int[] finalPrices(int[] prices) {
+        LinkedList<Integer> stack = new LinkedList<>();
 
-        int N = prices.length;
-        Stack<Integer> stack = new Stack<Integer>();
+        int[] ans = new int[prices.length];
 
-        int[] ans = new int[N];
-
-        for(int i = N - 1; i >= 0; i--){
+        for(int i = prices.length - 1; i >= 0; i--){
             if(stack.size() == 0){
-                ans[i] = N;
-                stack.push(i);
+                ans[i] = prices[i];
             }else{
-                while(stack.size() > 0 && prices[stack.peek()] > prices[i]){
-                    stack.pop();
+                while(stack.size() > 0 && stack.peekLast() > prices[i]){
+                    stack.removeLast();
                 }
 
                 if(stack.size() == 0){
-                    ans[i] = N;
-                    stack.push(i);
+                    ans[i] = prices[i];
                 }else{
-                    ans[i] = stack.peek();
-                    stack.push(i);
+                    ans[i] = prices[i] - stack.peekLast();
                 }
             }
-        }
 
-        for(int i = 0; i < N; i++){
-            int j = ans[i];
-            ans[i] = j == N ? prices[i] : prices[i] - prices[j];
+            stack.addLast(prices[i]);
         }
 
         return ans;
