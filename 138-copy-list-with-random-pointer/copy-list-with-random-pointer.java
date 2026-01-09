@@ -15,48 +15,37 @@ class Node {
 
 class Solution {
     public Node copyRandomList(Node head) {
-        
-        if(head == null){
-            return head;
+        Map<Node, Node> oldHm = new HashMap<>();
+        Map<Node, Node> newHm = new HashMap<>();
+
+        Node newHead = null;
+        Node temp1 = head;
+        Node temp2 = null;
+
+        while(temp1 != null){
+            Node newNode = new Node(temp1.val);
+
+            if(newHead == null){
+                newHead = newNode;
+                temp2 = newNode;
+            }else{
+                temp2.next = newNode;
+                temp2 = temp2.next;
+            }
+            
+            oldHm.put(newNode, temp1);
+            newHm.put(temp1, newNode);
+            temp1 = temp1.next;
         }
 
-        Map<Node, Integer> map = new HashMap<Node, Integer>();
+        temp2 = newHead;
 
-        Node curr = head;
-
-        int idx = 0;
-        while(curr != null){
-            map.put(curr, idx++);
-            curr = curr.next;
-        }
-
-        curr = head;
-
-        Node newHead = new Node(head.val);
-        Node newCurr = newHead;
-        curr = curr.next;
-
-        idx = 0;
-        Map<Integer, Node> newMap = new HashMap<Integer, Node>();
-        newMap.put(idx++, newHead);
-
-        while(curr != null){
-            newCurr.next = new Node(curr.val);
-            newMap.put(idx++, newCurr.next);
-            curr = curr.next;
-            newCurr = newCurr.next;
-        }
-
-        curr = head;
-        newCurr = newHead;
-
-        while(curr != null){
-            newCurr.random = newMap.get(map.get(curr.random));
-            curr = curr.next;
-            newCurr = newCurr.next;
+        while(temp2 != null){
+            Node oldN = oldHm.get(temp2);
+            temp2.random = newHm.get(oldN.random);
+            temp2 = temp2.next;
         }
 
         return newHead;
-
     }
 }
