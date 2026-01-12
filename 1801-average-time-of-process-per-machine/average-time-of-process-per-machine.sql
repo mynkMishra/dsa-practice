@@ -1,19 +1,8 @@
 # Write your MySQL query statement below
 
 
-WITH start_time AS (
-    SELECT a.machine_id, SUM(a.timestamp) AS start
-    FROM Activity a
-    WHERE a.activity_type = 'start'
-    GROUP BY a.machine_id
-), end_time AS (
-    SELECT a.machine_id, SUM(a.timestamp) AS end
-    FROM Activity a
-    WHERE a.activity_type = 'end'
-    GROUP BY a.machine_id
-)
-SELECT a.machine_id, ROUND((et.end - st.start)/(COUNT(a.process_id)/2), 3) AS processing_time
+SELECT a.machine_id, ROUND(AVG(b.timestamp - a.timestamp), 3) AS processing_time
 FROM Activity a
-JOIN start_time st ON st.machine_id = a.machine_id
-JOIN end_time et ON et.machine_id = a.machine_id
+LEFT JOIN Activity b ON a.machine_id = b.machine_id AND a.process_id = b.process_id AND a.activity_type = 'start' AND b.activity_type = 'end'
+WHERE b.machine_id IS NOT NULL 
 GROUP BY a.machine_id
